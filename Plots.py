@@ -1,9 +1,18 @@
-from Functions import *
+from Pump import *
+from Dump import *
 import pprint as pp
 
-# ----- PUMPING WATER -----
-# pumpwater(depth, volume, distance, pump power,)
-pumpResults = pumpWater(1, 1, 10, 10)
+# ----- PUMPING & DUMPING WATER -----
+depth = 1
+volume = 1.2
+distance = 13
+pumpPower = 10
+surfaceArea = 1
+innerDiameter = 0.1
+turbineOpeness = 0.2
+
+# pumpResults = pumpWater(depth, volume, distance, pumpPower, surfaceArea, innerDiameter)
+pumpResults = dumpWater(depth, volume, distance, surfaceArea, innerDiameter, turbineOpeness)
 pumpHeads = pumpResults[0]
 pumpRates = pumpResults[1]
 pumpVelocities = pumpResults[2]
@@ -15,14 +24,14 @@ bottomTankVolumes = bottomTankVolumes[:-1]
 topDepths = pumpResults[5]
 topDepths = topDepths[:-1]
 
-limit = timeSpan 
-# pp.pprint(topTankVolumes[-5:-1])
+limit = 12000
+# pp.pprint(topTankVolumes[-5:-1])dd
 # pp.pprint(t)
 
 # Define figure 
 fig = plt.figure()
 
-# Define figure with 2 subplots
+# Define figure with 5 subplots
 subfigs = fig.subfigures(1, 5, wspace=0.7)
 
 axsLeft = subfigs[0].subplots(1, 1)
