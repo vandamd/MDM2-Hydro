@@ -7,7 +7,7 @@ f = 0.01                                                    # Friction factor
 pumpEfficiency = 0.8                                        # Pump efficiency
 
 # Turbin Attributes
-# Tv = 0.2                                                    # Turbine openess
+turbineEfficiency = 0.8                                     # Turbine efficiency
 
 # Environment Attributes
 g = 9.81                                                    # Gravity

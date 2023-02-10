@@ -16,6 +16,8 @@ def dumpWater(initialTankDepth, initialVolume, baseToBase, surfaceArea, innerDia
     topVolumes = [initialVolume, ] 
     bottomVolumes = [0, ]
     maximumDepth = initialTankDepth
+    turbinePower = []
+    turbineEnergy = [0,]
 
     for i in range(len(t)):
         totalHeads.append(dTotalHead(velocities[i], topDepths[i], maximumDepth, baseToBase, innerDiameter))
@@ -23,6 +25,8 @@ def dumpWater(initialTankDepth, initialVolume, baseToBase, surfaceArea, innerDia
         velocities.append(velocityDown(totalHeads[i-1]))
         topVolumes.append(dTopVolume(bottomRates, topVolumes[i-1], initialVolume))
         bottomVolumes.append(dBottomVolume(bottomRates, bottomVolumes[i-1], initialVolume))
+        turbinePower.append(turbineOutputPower(bottomRates, totalHeads))
+        turbineEnergy.append(turbineOutputEnergy(turbinePower, turbineEnergy[i-1]))
 
         topDepth = topVolumes[i] * surfaceArea
 
@@ -33,8 +37,20 @@ def dumpWater(initialTankDepth, initialVolume, baseToBase, surfaceArea, innerDia
 
         topDepths.append(topDepth)
 
-    pp.pprint(totalHeads[:20])
-    return totalHeads, bottomRates, velocities, topVolumes, bottomVolumes, topDepths
+    # Find the time taken to reach the maximum depth in the bottom tank
+    for j in range(len(topDepths)):
+        if topDepths[j] == 0:
+            timeToMaxDepth = j
+            break
+    
+    
+    return totalHeads, bottomRates, velocities, topVolumes, bottomVolumes, topDepths, timeToMaxDepth, turbineEnergy
+
+
+
+
+
+
 
 def dTotalHead(velocity, topDepth, maximumDepth, baseToBase, innerDiameter):
 
@@ -83,3 +99,17 @@ def dBottomVolume(flowRates, lastVolume, maximumVolume):
         volume = maximumVolume
 
     return volume
+
+# Function to calculate the turbine output power using (bottomRates)*(totalHeads)*(density of water)*(gravity)*(turbine efficiency)
+def turbineOutputPower(bottomRates, totalHeads):
+    power = bottomRates[-1] * totalHeads[-1] * waterDensity * g * turbineEfficiency
+
+    return power
+
+# Function to calculate the turbine output energy using turbine output power and time
+def turbineOutputEnergy(power, lastEnergy):
+    dt = 1
+
+    energy = lastEnergy + power[-1] * dt
+
+    return energy

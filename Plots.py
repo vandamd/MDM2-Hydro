@@ -5,6 +5,7 @@ import pprint as pp
 # ----- PUMPING & DUMPING WATER -----
 depth = 1
 volume = 1.2
+# Head can go as low as 2m
 distance = 13
 pumpPower = 10
 surfaceArea = 1
@@ -23,8 +24,15 @@ bottomTankVolumes = pumpResults[4]
 bottomTankVolumes = bottomTankVolumes[:-1]
 topDepths = pumpResults[5]
 topDepths = topDepths[:-1]
+timeTaken = pumpResults[6]
+energy = pumpResults[7]
+energy = energy[:-1]
+energyTotal = energy[-1]
 
-limit = 12000
+print("Time Taken:", timeTaken, "seconds /", round(timeTaken/60, 2), "minutes /", round(timeTaken/3600, 2), "hours")
+print("Energy:", energyTotal, "Joules /", round(energyTotal/1000, 2), "Kilojoules /", round(energyTotal/1000000, 2), "Megajoules")
+
+limit = 50000
 # pp.pprint(topTankVolumes[-5:-1])dd
 # pp.pprint(t)
 
@@ -32,7 +40,7 @@ limit = 12000
 fig = plt.figure()
 
 # Define figure with 5 subplots
-subfigs = fig.subfigures(1, 5, wspace=0.7)
+subfigs = fig.subfigures(1, 6, wspace=2)
 
 axsLeft = subfigs[0].subplots(1, 1)
 axsLeft.plot(t, topTankVolumes, 'b', label='Top Tank')
@@ -68,7 +76,15 @@ axsMid3.set_ylabel('Depth (m)')
 axsMid3.grid()
 axsMid3.set_xlim(-5, limit)
 
-axsRight = subfigs[4].subplots(1, 1)
+axsMid4 = subfigs[4].subplots(1, 1)
+axsMid4.plot(t, energy)
+axsMid4.set_title('Energy generated/used')
+axsMid4.set_xlabel('Time (s)')
+axsMid4.set_ylabel('Energy (J)')
+axsMid4.grid()
+axsMid4.set_xlim(-5, limit)
+
+axsRight = subfigs[5].subplots(1, 1)
 axsRight.plot(t, pumpVelocities)
 axsRight.set_title('Velocity of Water')
 axsRight.set_xlabel('Time (s)')
