@@ -3,7 +3,6 @@ from Dump import *
 import pprint as pp
 
 # ----- PUMPING & DUMPING WATER -----
-depth = 1
 volume = 1.2
 # Head can go as low as 2m
 distance = 13
@@ -12,8 +11,8 @@ surfaceArea = 1
 innerDiameter = 0.1
 turbineOpeness = 0.2
 
-# pumpResults = pumpWater(depth, volume, distance, pumpPower, surfaceArea, innerDiameter)
-pumpResults = dumpWater(depth, volume, distance, surfaceArea, innerDiameter, turbineOpeness)
+# pumpResults = pumpWater(volume, distance, pumpPower, surfaceArea, innerDiameter)
+pumpResults = dumpWater(volume, distance, surfaceArea, innerDiameter, turbineOpeness)
 pumpHeads = pumpResults[0]
 pumpRates = pumpResults[1]
 pumpVelocities = pumpResults[2]
@@ -27,7 +26,7 @@ topDepths = topDepths[:-1]
 timeTaken = pumpResults[6]
 energy = pumpResults[7]
 energy = energy[:-1]
-energyTotal = energy[-1]
+energyTotal = pumpResults[8]
 
 print("Time Taken:", timeTaken, "seconds /", round(timeTaken/60, 2), "minutes /", round(timeTaken/3600, 2), "hours")
 print("Energy:", energyTotal, "Joules /", round(energyTotal/1000, 2), "Kilojoules /", round(energyTotal/1000000, 2), "Megajoules")

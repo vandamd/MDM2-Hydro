@@ -8,7 +8,8 @@ import pprint as pp
 
 # ----- Dumping Water -----
 
-def dumpWater(initialTankDepth, initialVolume, baseToBase, surfaceArea, innerDiameter, turbineOpeness):
+def dumpWater(initialVolume, baseToBase, surfaceArea, innerDiameter, turbineOpeness):
+    initialTankDepth = initialVolume / surfaceArea 
     totalHeads = []
     bottomRates = []
     velocities = [0,]
@@ -28,7 +29,7 @@ def dumpWater(initialTankDepth, initialVolume, baseToBase, surfaceArea, innerDia
         turbinePower.append(turbineOutputPower(bottomRates, totalHeads))
         turbineEnergy.append(turbineOutputEnergy(turbinePower, turbineEnergy[i-1]))
 
-        topDepth = topVolumes[i] * surfaceArea
+        topDepth = topVolumes[i] / surfaceArea
 
         if topDepth <= 0:
             topDepth = 0
@@ -43,8 +44,9 @@ def dumpWater(initialTankDepth, initialVolume, baseToBase, surfaceArea, innerDia
             timeToMaxDepth = j
             break
     
+    totalEnergy = turbineEnergy[timeToMaxDepth-1]
     
-    return totalHeads, bottomRates, velocities, topVolumes, bottomVolumes, topDepths, timeToMaxDepth, turbineEnergy
+    return totalHeads, bottomRates, velocities, topVolumes, bottomVolumes, topDepths, timeToMaxDepth, turbineEnergy, totalEnergy
 
 
 
