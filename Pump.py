@@ -1,9 +1,6 @@
 from Constants import *
 
 import math
-import numpy as np
-from scipy.integrate import odeint
-import matplotlib.pyplot as plt
 
 # ----- PUMPING WATER -----
 
@@ -18,29 +15,21 @@ def pumpWater(initialVolume, baseToBase, pumpPower, surfaceArea, innerDiameter):
     bottomVolumes = [initialVolume, ]
     maximumDepth = initialTankDepth
     pumpEnergy = [0,]
-    
-    for i in range(len(t)):
+    i = 0
+
+    while topDepths[-1] < initialTankDepth:
         totalHeads.append(pTotalHead(velocities[i], topDepths[i], maximumDepth, baseToBase, innerDiameter))
         topRates.append(topRate(pumpPower, totalHeads[i]))
         velocities.append(velocityUp(topRates[i], innerDiameter))
         topVolumes.append(pTopVolume(topRates, topVolumes[i-1], initialVolume))
         bottomVolumes.append(pBottomVolume(topRates, bottomVolumes[i-1], initialVolume))
-        pumpEnergy.append(pumpOutputEnergy(pumpPower, pumpEnergy[i-1], topVolumes, initialVolume))
+        pumpEnergy.append(pumpOutputEnergy(pumpPower, pumpEnergy[i-1]))
         topDepths.append(pTopDepth(topVolumes[i], surfaceArea))
 
-        if topDepths[-1] >= initialTankDepth:
-            topDepths[-1] = initialTankDepth
-            topRates[-1] = 0
-            velocities[-1] = 0
-            pumpEnergy[-1] = 0
+        i += 1
         
-    # Find the time taken to reach the maximum depth in the top tank
-    for j in range(len(topVolumes)):
-        if topVolumes[j] == initialVolume:
-            timeToMaxDepth = j
-            break
-    
-    totalEnergy = max(pumpEnergy)
+    timeToMaxDepth = i
+    totalEnergy = pumpEnergy[-1]
 
     return totalHeads, topRates, velocities, topVolumes, bottomVolumes, topDepths, timeToMaxDepth, pumpEnergy, totalEnergy
 
@@ -95,19 +84,16 @@ def pBottomVolume(flowRates, lastVolume, maximumVolume):
     return volume
 
 # Function to calculate the energy used to pump water
-def pumpOutputEnergy(pumpPower, lastEnergy, topVolumes, maximumVolume):
+def pumpOutputEnergy(pumpPower, lastEnergy): 
     dt = 1
 
     energy = lastEnergy + (pumpPower * dt)
-
-    if topVolumes[-1] == maximumVolume:
-        energy = 0
 
     return energy
 
 # Function to calculate the depth of water in the top tank
 def pTopDepth(topVolumes, surfaceArea):
 
-    topDepth = (topVolumes * surfaceArea)
+    topDepth = (topVolumes / surfaceArea)
 
     return topDepth

@@ -1,6 +1,7 @@
 from Pump import *
 from Dump import *
 import pprint as pp
+import matplotlib.pyplot as plt
 
 # ----- PUMPING & DUMPING WATER -----
 volume = 1.2
@@ -8,11 +9,11 @@ volume = 1.2
 distance = 13
 pumpPower = 10
 surfaceArea = 1
-innerDiameter = 0.1
-turbineOpeness = 0.2
+innerDiameter = 0.8
+turbineOpeness = 0.8
 
-# pumpResults = pumpWater(volume, distance, pumpPower, surfaceArea, innerDiameter)
-pumpResults = dumpWater(volume, distance, surfaceArea, innerDiameter, turbineOpeness)
+pumpResults = pumpWater(volume, distance, pumpPower, surfaceArea, innerDiameter)
+# pumpResults = dumpWater(volume, distance, surfaceArea, innerDiameter, turbineOpeness)
 pumpHeads = pumpResults[0]
 pumpRates = pumpResults[1]
 pumpVelocities = pumpResults[2]
@@ -27,12 +28,13 @@ timeTaken = pumpResults[6]
 energy = pumpResults[7]
 energy = energy[:-1]
 energyTotal = pumpResults[8]
+t = np.linspace(0,timeTaken,timeTaken)
 
 print("Time Taken:", timeTaken, "seconds /", round(timeTaken/60, 2), "minutes /", round(timeTaken/3600, 2), "hours")
 print("Energy:", energyTotal, "Joules /", round(energyTotal/1000, 2), "Kilojoules /", round(energyTotal/1000000, 2), "Megajoules")
 
-limit = 50000
-# pp.pprint(topTankVolumes[-5:-1])dd
+limit = 86400
+pp.pprint(energy[-1])
 # pp.pprint(t)
 
 # Define figure 

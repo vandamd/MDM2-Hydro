@@ -11,6 +11,6 @@ turbineEfficiency = 0.8                                     # Turbine efficiency
 
 # Environment Attributes
 g = 9.81                                                    # Gravity
-timeSpan = 86400                                            # In seconds
-t = np.linspace(0,timeSpan,timeSpan)                        # Time span in seconds (24 hours)
+# timeSpan = 86400                                            # In seconds
+# t = np.linspace(0,timeSpan,timeSpan)                        # Time span in seconds (24 hours)
 waterDensity = 997                                          # Density of water in kilograms per cubic meter

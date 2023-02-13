@@ -1,10 +1,6 @@
 from Constants import *
 
 import math
-import numpy as np
-from scipy.integrate import odeint
-import matplotlib.pyplot as plt
-import pprint as pp
 
 # ----- Dumping Water -----
 
@@ -20,8 +16,9 @@ def dumpWater(initialVolume, baseToBase, surfaceArea, innerDiameter, turbineOpen
     maximumDepth = initialTankDepth
     turbinePower = []
     turbineEnergy = [0,]
+    i = 0
 
-    for i in range(len(t)):
+    while topDepths[-1] > 0:
         totalHeads.append(dTotalHead(velocities[i], topDepths[i], maximumDepth, baseToBase, innerDiameter))
         bottomRates.append(bottomRate(innerDiameter, totalHeads[i], turbineOpeness))
         velocities.append(velocityDown(totalHeads[i-1]))
@@ -31,18 +28,9 @@ def dumpWater(initialVolume, baseToBase, surfaceArea, innerDiameter, turbineOpen
         turbineEnergy.append(turbineOutputEnergy(turbinePower, turbineEnergy[i-1]))
         topDepths.append(dTopDepth(topVolumes[i], surfaceArea))
 
-        if topDepths[-1] <= 0:
-            topDepths[-1] = 0
-            bottomRates[-1] = 0
-            velocities[-1] = 0
-            turbineEnergy[-1] = 0
+        i += 1
 
-    # Find the time taken to reach the maximum depth in the bottom tank
-    for j in range(len(topDepths)):
-        if topDepths[j] == 0:
-            timeToMaxDepth = j
-            break
-    
+    timeToMaxDepth = i
     totalEnergy = max(turbineEnergy)
     
     return totalHeads, bottomRates, velocities, topVolumes, bottomVolumes, topDepths, timeToMaxDepth, turbineEnergy, totalEnergy
@@ -117,6 +105,6 @@ def turbineOutputEnergy(power, lastEnergy):
 # Function to calculate the depth of water in the top tank
 def dTopDepth(topVolumes, surfaceArea):
 
-    topDepth = (topVolumes * surfaceArea)
+    topDepth = (topVolumes / surfaceArea)
 
     return topDepth
