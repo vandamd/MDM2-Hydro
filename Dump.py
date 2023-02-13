@@ -8,6 +8,7 @@ import pprint as pp
 
 # ----- Dumping Water -----
 
+# Function to calculate the Heads, Flow Rates and Velocities of the water going down the system
 def dumpWater(initialVolume, baseToBase, surfaceArea, innerDiameter, turbineOpeness):
     initialTankDepth = initialVolume / surfaceArea 
     totalHeads = []
@@ -28,15 +29,13 @@ def dumpWater(initialVolume, baseToBase, surfaceArea, innerDiameter, turbineOpen
         bottomVolumes.append(dBottomVolume(bottomRates, bottomVolumes[i-1], initialVolume))
         turbinePower.append(turbineOutputPower(bottomRates, totalHeads))
         turbineEnergy.append(turbineOutputEnergy(turbinePower, turbineEnergy[i-1]))
+        topDepths.append(dTopDepth(topVolumes[i], surfaceArea))
 
-        topDepth = topVolumes[i] / surfaceArea
-
-        if topDepth <= 0:
-            topDepth = 0
+        if topDepths[-1] <= 0:
+            topDepths[-1] = 0
             bottomRates[-1] = 0
             velocities[-1] = 0
-
-        topDepths.append(topDepth)
+            turbineEnergy[-1] = 0
 
     # Find the time taken to reach the maximum depth in the bottom tank
     for j in range(len(topDepths)):
@@ -44,16 +43,11 @@ def dumpWater(initialVolume, baseToBase, surfaceArea, innerDiameter, turbineOpen
             timeToMaxDepth = j
             break
     
-    totalEnergy = turbineEnergy[timeToMaxDepth-1]
+    totalEnergy = max(turbineEnergy)
     
     return totalHeads, bottomRates, velocities, topVolumes, bottomVolumes, topDepths, timeToMaxDepth, turbineEnergy, totalEnergy
 
-
-
-
-
-
-
+# Function to calculate the total head when dumping
 def dTotalHead(velocity, topDepth, maximumDepth, baseToBase, innerDiameter):
 
     length = baseToBase
@@ -64,17 +58,20 @@ def dTotalHead(velocity, topDepth, maximumDepth, baseToBase, innerDiameter):
 
     return H
 
+# Function to calculate the flow rate of water going down the system
 def bottomRate(innerDiameter, H, Tv):
     # flowrateToTurbine = Tv * ((math.pi * (0.5 * innerDiameter) ** 2) / 100) * velocity
     flowrateToTurbine = (Tv / 100) * (math.pi * (0.5 * innerDiameter) ** 2) * ((2 * g * H) ** 0.5)
 
     return flowrateToTurbine
 
+# Function to calculate the velocity of water going down the system
 def velocityDown(head):
     velocity = (2 * g * head) ** 0.5
 
     return velocity
 
+# Function to calculate the volume of water in the top tank
 def dTopVolume(flowRates, lastVolume, maximumVolume):
     dt = 1
     volume = lastVolume - flowRates[-1] * dt
@@ -88,6 +85,7 @@ def dTopVolume(flowRates, lastVolume, maximumVolume):
 
     return volume
 
+# Function to calculate the volume of water in the bottom tank
 def dBottomVolume(flowRates, lastVolume, maximumVolume):
     dt = 1
 
@@ -115,3 +113,10 @@ def turbineOutputEnergy(power, lastEnergy):
     energy = lastEnergy + power[-1] * dt
 
     return energy
+
+# Function to calculate the depth of water in the top tank
+def dTopDepth(topVolumes, surfaceArea):
+
+    topDepth = (topVolumes * surfaceArea)
+
+    return topDepth

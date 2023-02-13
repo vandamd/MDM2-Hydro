@@ -26,23 +26,21 @@ def pumpWater(initialVolume, baseToBase, pumpPower, surfaceArea, innerDiameter):
         topVolumes.append(pTopVolume(topRates, topVolumes[i-1], initialVolume))
         bottomVolumes.append(pBottomVolume(topRates, bottomVolumes[i-1], initialVolume))
         pumpEnergy.append(pumpOutputEnergy(pumpPower, pumpEnergy[i-1], topVolumes, initialVolume))
+        topDepths.append(pTopDepth(topVolumes[i], surfaceArea))
 
-        topDepth = topVolumes[i] / surfaceArea
-
-        if topVolumes[i] == initialVolume:
-            # topDepth = initialTankDepth
+        if topDepths[-1] >= initialTankDepth:
+            topDepths[-1] = initialTankDepth
             topRates[-1] = 0
             velocities[-1] = 0
+            pumpEnergy[-1] = 0
         
-        topDepths.append(topDepth)
-
     # Find the time taken to reach the maximum depth in the top tank
     for j in range(len(topVolumes)):
         if topVolumes[j] == initialVolume:
             timeToMaxDepth = j
             break
     
-    totalEnergy = pumpEnergy[timeToMaxDepth-1]
+    totalEnergy = max(pumpEnergy)
 
     return totalHeads, topRates, velocities, topVolumes, bottomVolumes, topDepths, timeToMaxDepth, pumpEnergy, totalEnergy
 
@@ -106,7 +104,6 @@ def pumpOutputEnergy(pumpPower, lastEnergy, topVolumes, maximumVolume):
         energy = 0
 
     return energy
-
 
 # Function to calculate the depth of water in the top tank
 def pTopDepth(topVolumes, surfaceArea):
