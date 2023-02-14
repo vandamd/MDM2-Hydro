@@ -4,11 +4,11 @@ import pprint as pp
 import matplotlib.pyplot as plt
 
 # ----- PUMPING & DUMPING WATER -----
-volume = 1.2
+volume = 5
 # Head can go as low as 2m
-distance = 13
+distance = 5
 pumpPower = 10
-surfaceArea = 1
+surfaceArea = 1.5
 innerDiameter = 0.8
 turbineOpeness = 0.8
 
@@ -28,12 +28,13 @@ timeTaken = pumpResults[6]
 energy = pumpResults[7]
 energy = energy[:-1]
 energyTotal = pumpResults[8]
+
 t = np.linspace(0,timeTaken,timeTaken)
 
 print("Time Taken:", timeTaken, "seconds /", round(timeTaken/60, 2), "minutes /", round(timeTaken/3600, 2), "hours")
 print("Energy:", energyTotal, "Joules /", round(energyTotal/1000, 2), "Kilojoules /", round(energyTotal/1000000, 2), "Megajoules")
 
-limit = 86400
+limit = timeTaken
 pp.pprint(energy[-1])
 # pp.pprint(t)
 

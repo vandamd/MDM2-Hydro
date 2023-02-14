@@ -18,22 +18,27 @@ def dumpWater(initialVolume, baseToBase, surfaceArea, innerDiameter, turbineOpen
     turbineEnergy = [0,]
     i = 0
 
-    while topDepths[-1] > 0:
-        totalHeads.append(dTotalHead(velocities[i], topDepths[i], maximumDepth, baseToBase, innerDiameter))
-        bottomRates.append(bottomRate(innerDiameter, totalHeads[i], turbineOpeness))
-        velocities.append(velocityDown(totalHeads[i-1]))
-        topVolumes.append(dTopVolume(bottomRates, topVolumes[i-1], initialVolume))
-        bottomVolumes.append(dBottomVolume(bottomRates, bottomVolumes[i-1], initialVolume))
-        turbinePower.append(turbineOutputPower(bottomRates, totalHeads))
-        turbineEnergy.append(turbineOutputEnergy(turbinePower, turbineEnergy[i-1]))
-        topDepths.append(dTopDepth(topVolumes[i], surfaceArea))
+    if initialTankDepth >= baseToBase:
+        return 0, 0, 0, 0, 0, 0, 0, 0, 0
+    else:
+        while topDepths[-1] > 0:
+            totalHeads.append(dTotalHead(velocities[i], topDepths[i], maximumDepth, baseToBase, innerDiameter))
+            if totalHeads[-1] < 0:
+                return 0, 0, 0, 0, 0, 0, 0, 0, 0
+            bottomRates.append(bottomRate(innerDiameter, totalHeads[i], turbineOpeness))
+            velocities.append(velocityDown(totalHeads[i-1]))
+            topVolumes.append(dTopVolume(bottomRates, topVolumes[i-1], initialVolume))
+            bottomVolumes.append(dBottomVolume(bottomRates, bottomVolumes[i-1], initialVolume))
+            turbinePower.append(turbineOutputPower(bottomRates, totalHeads))
+            turbineEnergy.append(turbineOutputEnergy(turbinePower, turbineEnergy[i-1]))
+            topDepths.append(dTopDepth(topVolumes[i], surfaceArea))
 
-        i += 1
+            i += 1
 
-    timeToMaxDepth = i
-    totalEnergy = max(turbineEnergy)
-    
-    return totalHeads, bottomRates, velocities, topVolumes, bottomVolumes, topDepths, timeToMaxDepth, turbineEnergy, totalEnergy
+        timeToMaxDepth = i
+        totalEnergy = max(turbineEnergy)
+        
+        return totalHeads, bottomRates, velocities, topVolumes, bottomVolumes, topDepths, timeToMaxDepth, turbineEnergy, totalEnergy
 
 # Function to calculate the total head when dumping
 def dTotalHead(velocity, topDepth, maximumDepth, baseToBase, innerDiameter):

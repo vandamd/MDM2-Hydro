@@ -17,21 +17,26 @@ def pumpWater(initialVolume, baseToBase, pumpPower, surfaceArea, innerDiameter):
     pumpEnergy = [0,]
     i = 0
 
-    while topDepths[-1] < initialTankDepth:
-        totalHeads.append(pTotalHead(velocities[i], topDepths[i], maximumDepth, baseToBase, innerDiameter))
-        topRates.append(topRate(pumpPower, totalHeads[i]))
-        velocities.append(velocityUp(topRates[i], innerDiameter))
-        topVolumes.append(pTopVolume(topRates, topVolumes[i-1], initialVolume))
-        bottomVolumes.append(pBottomVolume(topRates, bottomVolumes[i-1], initialVolume))
-        pumpEnergy.append(pumpOutputEnergy(pumpPower, pumpEnergy[i-1]))
-        topDepths.append(pTopDepth(topVolumes[i], surfaceArea))
+    if initialTankDepth >= baseToBase:
+        return 0, 0, 0, 0, 0, 0, 0, 0, 0
+    else:
+        while topDepths[-1] < initialTankDepth:
+            totalHeads.append(pTotalHead(velocities[i], topDepths[i], maximumDepth, baseToBase, innerDiameter))
+            if totalHeads[-1] < 0:
+                return 0, 0, 0, 0, 0, 0, 0, 0, 0
+            topRates.append(topRate(pumpPower, totalHeads[i]))
+            velocities.append(velocityUp(topRates[i], innerDiameter))
+            topVolumes.append(pTopVolume(topRates, topVolumes[i-1], initialVolume))
+            bottomVolumes.append(pBottomVolume(topRates, bottomVolumes[i-1], initialVolume))
+            pumpEnergy.append(pumpOutputEnergy(pumpPower, pumpEnergy[i-1]))
+            topDepths.append(pTopDepth(topVolumes[i], surfaceArea))
 
-        i += 1
-        
-    timeToMaxDepth = i
-    totalEnergy = pumpEnergy[-1]
+            i += 1
+            
+        timeToMaxDepth = i
+        totalEnergy = pumpEnergy[-1]
 
-    return totalHeads, topRates, velocities, topVolumes, bottomVolumes, topDepths, timeToMaxDepth, pumpEnergy, totalEnergy
+        return totalHeads, topRates, velocities, topVolumes, bottomVolumes, topDepths, timeToMaxDepth, pumpEnergy, totalEnergy
 
 # Function to calculate the total head when pumping 
 def pTotalHead(velocity, topDepth, maximumDepth, baseToBase, innerDiameter):

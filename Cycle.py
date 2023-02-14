@@ -1,24 +1,30 @@
 from Pump import *
 from Dump import *
 import matplotlib.pyplot as plt
+from bayes_opt import BayesianOptimization
 
 # User input times
 # pumpTime = input("What time do you want to pump the water? (HH:MM)")
 # dumpTime = input("What time do you want to dump the water? (HH:MM)")
 
 # Variables
-volume = 0.145
-distance = 50
-pumpPower = 5
-surfaceArea = 1.5
-innerDiameter = 0.1
-turbineOpeness = 0.8
+volume = 5
+distance = 5
+pumpPower = 50
+surfaceArea = 2
+innerDiameter = 5
+turbineOpeness = 90
 
 # Function to dump water then pump water at specific times in the day
-def cycleWater(dumpTime, pumpTime, volume, distance, pumpPower, surfaceArea, innerDiameter, turbineOpeness):
-    # # Convert time to seconds
-    pumpTime = int(pumpTime[0:2]) * 3600 + int(pumpTime[3:5]) * 60
+# def cycleWater(dumpTime, pumpTime, volume, distance, pumpPower, surfaceArea, innerDiameter, turbineOpeness):
+def cycleWater(volume, distance, pumpPower, surfaceArea, innerDiameter, turbineOpeness):
+    # Convert time to seconds
+
+    dumpTime = "08:00"
+    pumpTime = "16:00"
+
     dumpTime = int(dumpTime[0:2]) * 3600 + int(dumpTime[3:5]) * 60
+    pumpTime = int(pumpTime[0:2]) * 3600 + int(pumpTime[3:5]) * 60
 
     # Pump water
     pumpResults = pumpWater(volume, distance, pumpPower, surfaceArea, innerDiameter)
@@ -63,8 +69,6 @@ def cycleWater(dumpTime, pumpTime, volume, distance, pumpPower, surfaceArea, inn
     print("Energy generated: ", round(dEnergy, 2), "Joules /", round(dEnergy/1000, 2), "Kilojoules /", round(dEnergy/1000000, 2), "Megajoules")
     print("Net Energy: ", round(dEnergy - pEnergy, 2), "Joules /", round((dEnergy - pEnergy)/1000, 2), "Kilojoules /", round((dEnergy - pEnergy)/1000000, 4), "Megajoules")
 
-
-
     # Plot
     fig = plt.figure()
 
@@ -90,14 +94,44 @@ def cycleWater(dumpTime, pumpTime, volume, distance, pumpPower, surfaceArea, inn
     axsMid.set_ylabel('Energy (J)')
     axsMid.grid()
 
-
-
-
-
-
     fig.subplots_adjust(bottom=0.15)
     plt.show()
 
-    # print(lossEnergy)
+    return netEnergy
 
-cycleWater("01:00", "20:00", volume, distance, pumpPower, surfaceArea, innerDiameter, turbineOpeness)
+
+def netEnergy(volume, distance, pumpPower, surfaceArea, innerDiameter, turbineOpeness):
+
+    # Pump water
+    pumpResults = pumpWater(volume, distance, pumpPower, surfaceArea, innerDiameter)
+
+    # Dump water
+    dumpResults = dumpWater(volume, distance, surfaceArea, innerDiameter, turbineOpeness)
+
+    # Energy Total
+    dEnergy = dumpResults[8]
+    pEnergy = pumpResults[8]
+
+    # Net Energy
+    netEnergy = dEnergy - pEnergy
+
+    return netEnergy
+
+# cycleWater("08:00", "20:00", volume, distance, pumpPower, surfaceArea, innerDiameter, turbineOpeness)
+
+# Define the bounds of the variables
+pbounds = {'volume': (1, 100), 'distance': (0.001, 20), 'pumpPower': (1, 500), 'surfaceArea': (1, 4), 'innerDiameter': (0.01, 1), 'turbineOpeness': (1, 100)}
+
+# Create the optimiser
+optimiser = BayesianOptimization(
+    f=netEnergy,
+    pbounds=pbounds,
+    random_state=1,
+)
+
+optimiser.maximize(
+    init_points=5,
+    n_iter=50,
+)
+
+print(optimiser.max)
