@@ -3,6 +3,8 @@ from Dump import *
 import matplotlib.pyplot as plt
 from bayes_opt import BayesianOptimization
 from bayes_opt import UtilityFunction
+import plotly.express as px
+import pandas as pd
 
 # User input times
 # pumpTime = input("What time do you want to pump the water? (HH:MM)")
@@ -107,6 +109,7 @@ def cycleWater(dumpTime, pumpTime, volume, distance, pumpPower, surfaceArea, inn
 # ----- Bayesian Optimisation -----
 # NOTE: The depth of water CANNOT be greater than the distance between the tanks.
 #       - i.e. the lower bound of the distance > upper bound of volume / lower bound of surface area
+# TODO: 2D Histogram of the results of the optimisation, changing volume and distance only
 
 def netEnergy(volume, distance, pumpPower, surfaceArea, innerDiameter, turbineOpeness):
 
@@ -126,7 +129,7 @@ def netEnergy(volume, distance, pumpPower, surfaceArea, innerDiameter, turbineOp
     return netEnergy
 
 # Define the bounds of the variables
-pbounds = {'volume': (0.001, 10), 'distance': (10, 50), 'pumpPower': (300, 300), 'surfaceArea': (1, 1), 'innerDiameter': (0.25, 0.25), 'turbineOpeness': (100, 100)}
+pbounds = {'volume': (1, 10), 'distance': (1, 100), 'pumpPower': (3000, 3000), 'surfaceArea': (10, 10), 'innerDiameter': (0.25, 0.25), 'turbineOpeness': (100, 100)}
 
 acquisition_function = UtilityFunction(kind="poi", xi=1e-1)
 
@@ -135,12 +138,55 @@ optimiser = BayesianOptimization(
     f=netEnergy,
     pbounds=pbounds,
     random_state=1234,
+    verbose=2,
+    allow_duplicate_points=True
 )
 
 optimiser.maximize(
-    init_points=5,
-    n_iter=50,
+    init_points=10,
+    n_iter=100,
     acquisition_function=acquisition_function
 )
 
 print(optimiser.max)
+print('\n')
+
+volumes = []
+distances = []
+nets = []
+
+res = optimiser.res
+for i in range(len(res)):
+    volumes.append(res[i]['params']['volume'])
+    distances.append(res[i]['params']['distance'])
+    nets.append(res[i]['target'])
+
+print(volumes[0])
+
+fig = px.scatter(
+    x=volumes, 
+    y=distances, 
+    color=nets, 
+    color_continuous_scale="blugrn", 
+    title="Bayesian Optimization Result", 
+    labels={'color': 'Net Energy'},
+)
+
+fig.update_layout(
+    xaxis_title="Volume of Water / m^3",
+    yaxis_title="Distance Between Tanks / m",
+)
+
+fig.update_traces(
+    marker_size=20,
+    marker_line_width=2,
+    marker_line_color='White',
+)
+
+# More ticks on the x-axis
+fig.update_xaxes(nticks=20)
+
+# More ticks on the y-axis
+fig.update_yaxes(nticks=20)
+
+fig.show()
