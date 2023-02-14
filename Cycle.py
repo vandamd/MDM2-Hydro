@@ -2,6 +2,7 @@ from Pump import *
 from Dump import *
 import matplotlib.pyplot as plt
 from bayes_opt import BayesianOptimization
+from bayes_opt import UtilityFunction
 
 # User input times
 # pumpTime = input("What time do you want to pump the water? (HH:MM)")
@@ -16,13 +17,8 @@ innerDiameter = 5
 turbineOpeness = 90
 
 # Function to dump water then pump water at specific times in the day
-# def cycleWater(dumpTime, pumpTime, volume, distance, pumpPower, surfaceArea, innerDiameter, turbineOpeness):
-def cycleWater(volume, distance, pumpPower, surfaceArea, innerDiameter, turbineOpeness):
+def cycleWater(dumpTime, pumpTime, volume, distance, pumpPower, surfaceArea, innerDiameter, turbineOpeness):
     # Convert time to seconds
-
-    dumpTime = "08:00"
-    pumpTime = "16:00"
-
     dumpTime = int(dumpTime[0:2]) * 3600 + int(dumpTime[3:5]) * 60
     pumpTime = int(pumpTime[0:2]) * 3600 + int(pumpTime[3:5]) * 60
 
@@ -99,6 +95,18 @@ def cycleWater(volume, distance, pumpPower, surfaceArea, innerDiameter, turbineO
 
     return netEnergy
 
+# cycleWater("08:00", "20:00", volume, distance, pumpPower, surfaceArea, innerDiameter, turbineOpeness)
+
+
+
+
+
+
+
+
+# ----- Bayesian Optimisation -----
+# NOTE: The depth of water CANNOT be greater than the distance between the tanks.
+#       - i.e. the lower bound of the distance > upper bound of volume / lower bound of surface area
 
 def netEnergy(volume, distance, pumpPower, surfaceArea, innerDiameter, turbineOpeness):
 
@@ -117,21 +125,22 @@ def netEnergy(volume, distance, pumpPower, surfaceArea, innerDiameter, turbineOp
 
     return netEnergy
 
-# cycleWater("08:00", "20:00", volume, distance, pumpPower, surfaceArea, innerDiameter, turbineOpeness)
-
 # Define the bounds of the variables
-pbounds = {'volume': (1, 100), 'distance': (0.001, 20), 'pumpPower': (1, 500), 'surfaceArea': (1, 4), 'innerDiameter': (0.01, 1), 'turbineOpeness': (1, 100)}
+pbounds = {'volume': (0.001, 10), 'distance': (10, 50), 'pumpPower': (300, 300), 'surfaceArea': (1, 1), 'innerDiameter': (0.25, 0.25), 'turbineOpeness': (100, 100)}
+
+acquisition_function = UtilityFunction(kind="poi", xi=1e-1)
 
 # Create the optimiser
 optimiser = BayesianOptimization(
     f=netEnergy,
     pbounds=pbounds,
-    random_state=1,
+    random_state=1234,
 )
 
 optimiser.maximize(
     init_points=5,
     n_iter=50,
+    acquisition_function=acquisition_function
 )
 
 print(optimiser.max)

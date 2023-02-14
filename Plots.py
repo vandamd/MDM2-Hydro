@@ -12,8 +12,8 @@ surfaceArea = 1.5
 innerDiameter = 0.8
 turbineOpeness = 0.8
 
-pumpResults = pumpWater(volume, distance, pumpPower, surfaceArea, innerDiameter)
-# pumpResults = dumpWater(volume, distance, surfaceArea, innerDiameter, turbineOpeness)
+# pumpResults = pumpWater(volume, distance, pumpPower, surfaceArea, innerDiameter)
+pumpResults = dumpWater(volume, distance, surfaceArea, innerDiameter, turbineOpeness)
 pumpHeads = pumpResults[0]
 pumpRates = pumpResults[1]
 pumpVelocities = pumpResults[2]

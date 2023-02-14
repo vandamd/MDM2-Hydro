@@ -22,7 +22,7 @@ def pumpWater(initialVolume, baseToBase, pumpPower, surfaceArea, innerDiameter):
     else:
         while topDepths[-1] < initialTankDepth:
             totalHeads.append(pTotalHead(velocities[i], topDepths[i], maximumDepth, baseToBase, innerDiameter))
-            if totalHeads[-1] < 0:
+            if totalHeads[-1] == 0:
                 return 0, 0, 0, 0, 0, 0, 0, 0, 0
             topRates.append(topRate(pumpPower, totalHeads[i]))
             velocities.append(velocityUp(topRates[i], innerDiameter))
