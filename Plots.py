@@ -4,16 +4,16 @@ import pprint as pp
 import matplotlib.pyplot as plt
 
 # ----- PUMPING & DUMPING WATER -----
-volume = 5
+volume = 450
 # Head can go as low as 2m
-distance = 5
-pumpPower = 10
-surfaceArea = 1.5
-innerDiameter = 0.8
-turbineOpeness = 0.8
+distance = 200
+pumpPower = 3000
+surfaceArea = 225
+innerDiameter = 0.2
+turbineOpeness = 100
 
-# pumpResults = pumpWater(volume, distance, pumpPower, surfaceArea, innerDiameter)
-pumpResults = dumpWater(volume, distance, surfaceArea, innerDiameter, turbineOpeness)
+pumpResults = pumpWater(volume, distance, pumpPower, surfaceArea, innerDiameter)
+# pumpResults = dumpWater(volume, distance, surfaceArea, innerDiameter, turbineOpeness)
 pumpHeads = pumpResults[0]
 pumpRates = pumpResults[1]
 pumpVelocities = pumpResults[2]
@@ -35,7 +35,7 @@ print("Time Taken:", timeTaken, "seconds /", round(timeTaken/60, 2), "minutes /"
 print("Energy:", energyTotal, "Joules /", round(energyTotal/1000, 2), "Kilojoules /", round(energyTotal/1000000, 2), "Megajoules")
 
 limit = timeTaken
-pp.pprint(energy[-1])
+# pp.pprint(energy[-1])
 # pp.pprint(t)
 
 # Define figure 

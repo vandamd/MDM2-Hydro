@@ -38,7 +38,7 @@ def dumpWater(initialVolume, baseToBase, surfaceArea, innerDiameter, turbineOpen
         timeToMaxDepth = i
         totalEnergy = max(turbineEnergy)
         
-        return totalHeads, bottomRates, velocities, topVolumes, bottomVolumes, topDepths, timeToMaxDepth, turbineEnergy, totalEnergy
+        return totalHeads, bottomRates, velocities, topVolumes, bottomVolumes, topDepths, timeToMaxDepth, turbineEnergy, totalEnergy, turbinePower
 
 # Function to calculate the total head when dumping
 def dTotalHead(velocity, topDepth, maximumDepth, baseToBase, innerDiameter):

@@ -1,7 +1,7 @@
 import numpy as np
 
 # Pipe Attributes
-f = 0.01                                                    # Friction factor
+f = 0.002                                                    # Friction factor
 
 # Pump Attributes
 pumpEfficiency = 0.8                                        # Pump efficiency
