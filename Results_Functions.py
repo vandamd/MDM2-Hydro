@@ -6,6 +6,7 @@ from bayes_opt import BayesianOptimization
 from bayes_opt import UtilityFunction
 import plotly.express as px
 import plotly.graph_objects as go
+import plotly.io as pio
 import pandas as pd
 
 # Function to plot the results of the dump
@@ -38,7 +39,7 @@ def plotDump(volume, distance, surfaceArea, innerDiameter, turbineOpeness):
     fig = plt.figure()
 
     # Define figure with 5 subplots
-    subfigs = fig.subfigures(1, 6, wspace=2)
+    subfigs = fig.subfigures(3, 1, wspace=2)
 
     axsLeft = subfigs[0].subplots(1, 1)
     axsLeft.plot(t, topTankVolumes, 'b', label='Top Tank')
@@ -50,7 +51,7 @@ def plotDump(volume, distance, surfaceArea, innerDiameter, turbineOpeness):
     axsLeft.grid()
     # axsLeft.set_xlim(-5, limit)
 
-    axsMid1 = subfigs[1].subplots(1, 1)
+    axsMid1 = subfigs[2].subplots(1, 1)
     axsMid1.plot(t, pumpRates)
     axsMid1.set_title('Flowrate of Water')
     axsMid1.set_xlabel('Time (s)')
@@ -58,36 +59,36 @@ def plotDump(volume, distance, surfaceArea, innerDiameter, turbineOpeness):
     axsMid1.grid()
     # axsMid1.set_xlim(-5, limit)
 
-    axsMid2 = subfigs[2].subplots(1, 1)
-    axsMid2.plot(t, pumpHeads)
-    axsMid2.set_title('Head of Water')
-    axsMid2.set_xlabel('Time (s)')
-    axsMid2.set_ylabel('Head (m)')
-    axsMid2.grid()
+    # axsMid2 = subfigs[2].subplots(1, 1)
+    # axsMid2.plot(t, pumpHeads)
+    # axsMid2.set_title('Head of Water')
+    # axsMid2.set_xlabel('Time (s)')
+    # axsMid2.set_ylabel('Head (m)')
+    # axsMid2.grid()
     # axsMid2.set_xlim(-5, limit)
 
-    axsMid3 = subfigs[3].subplots(1, 1)
-    axsMid3.plot(t, topDepths)
-    axsMid3.set_title('Depth of Water in the Top Tank')
-    axsMid3.set_xlabel('Time (s)')
-    axsMid3.set_ylabel('Depth (m)')
-    axsMid3.grid()
+    # axsMid3 = subfigs[3].subplots(1, 1)
+    # axsMid3.plot(t, topDepths)
+    # axsMid3.set_title('Depth of Water in the Top Tank')
+    # axsMid3.set_xlabel('Time (s)')
+    # axsMid3.set_ylabel('Depth (m)')
+    # axsMid3.grid()
     # axsMid3.set_xlim(-5, limit)
 
-    axsMid4 = subfigs[4].subplots(1, 1)
+    axsMid4 = subfigs[1].subplots(1, 1)
     axsMid4.plot(t, energy)
-    axsMid4.set_title('Energy generated/used')
+    axsMid4.set_title('Energy generated')
     axsMid4.set_xlabel('Time (s)')
     axsMid4.set_ylabel('Energy (J)')
     axsMid4.grid()
     # axsMid4.set_xlim(-5, limit)
 
-    axsRight = subfigs[5].subplots(1, 1)
-    axsRight.plot(t, pumpVelocities)
-    axsRight.set_title('Velocity of Water')
-    axsRight.set_xlabel('Time (s)')
-    axsRight.set_ylabel('Velocity (m/s)')
-    axsRight.grid()
+    # axsRight = subfigs[5].subplots(1, 1)
+    # axsRight.plot(t, pumpVelocities)
+    # axsRight.set_title('Velocity of Water')
+    # axsRight.set_xlabel('Time (s)')
+    # axsRight.set_ylabel('Velocity (m/s)')
+    # axsRight.grid()
     # axsRight.set_xlim(-5, limit)
 
     plt.show()
@@ -123,7 +124,7 @@ def plotPump(volume, distance, pumpPower, surfaceArea, innerDiameter):
     fig = plt.figure()
 
     # Define figure with 5 subplots
-    subfigs = fig.subfigures(1, 6, wspace=2)
+    subfigs = fig.subfigures(3, 1, wspace=2)
 
     axsLeft = subfigs[0].subplots(1, 1)
     axsLeft.plot(t, topTankVolumes, 'b', label='Top Tank')
@@ -135,7 +136,7 @@ def plotPump(volume, distance, pumpPower, surfaceArea, innerDiameter):
     axsLeft.grid()
     # axsLeft.set_xlim(-5, limit)
 
-    axsMid1 = subfigs[1].subplots(1, 1)
+    axsMid1 = subfigs[2].subplots(1, 1)
     axsMid1.plot(t, pumpRates)
     axsMid1.set_title('Flowrate of Water')
     axsMid1.set_xlabel('Time (s)')
@@ -143,23 +144,23 @@ def plotPump(volume, distance, pumpPower, surfaceArea, innerDiameter):
     axsMid1.grid()
     # axsMid1.set_xlim(-5, limit)
 
-    axsMid2 = subfigs[2].subplots(1, 1)
-    axsMid2.plot(t, pumpHeads)
-    axsMid2.set_title('Head of Water')
-    axsMid2.set_xlabel('Time (s)')
-    axsMid2.set_ylabel('Head (m)')
-    axsMid2.grid()
+    # axsMid2 = subfigs[2].subplots(1, 1)
+    # axsMid2.plot(t, pumpHeads)
+    # axsMid2.set_title('Head of Water')
+    # axsMid2.set_xlabel('Time (s)')
+    # axsMid2.set_ylabel('Head (m)')
+    # axsMid2.grid()
     # axsMid2.set_xlim(-5, limit)
 
-    axsMid3 = subfigs[3].subplots(1, 1)
-    axsMid3.plot(t, topDepths)
-    axsMid3.set_title('Depth of Water in the Top Tank')
-    axsMid3.set_xlabel('Time (s)')
-    axsMid3.set_ylabel('Depth (m)')
-    axsMid3.grid()
+    # axsMid3 = subfigs[3].subplots(1, 1)
+    # axsMid3.plot(t, topDepths)
+    # axsMid3.set_title('Depth of Water in the Top Tank')
+    # axsMid3.set_xlabel('Time (s)')
+    # axsMid3.set_ylabel('Depth (m)')
+    # axsMid3.grid()
     # axsMid3.set_xlim(-5, limit)
 
-    axsMid4 = subfigs[4].subplots(1, 1)
+    axsMid4 = subfigs[1].subplots(1, 1)
     axsMid4.plot(t, energy)
     axsMid4.set_title('Energy generated/used')
     axsMid4.set_xlabel('Time (s)')
@@ -167,12 +168,12 @@ def plotPump(volume, distance, pumpPower, surfaceArea, innerDiameter):
     axsMid4.grid()
     # axsMid4.set_xlim(-5, limit)
 
-    axsRight = subfigs[5].subplots(1, 1)
-    axsRight.plot(t, pumpVelocities)
-    axsRight.set_title('Velocity of Water')
-    axsRight.set_xlabel('Time (s)')
-    axsRight.set_ylabel('Velocity (m/s)')
-    axsRight.grid()
+    # axsRight = subfigs[5].subplots(1, 1)
+    # axsRight.plot(t, pumpVelocities)
+    # axsRight.set_title('Velocity of Water')
+    # axsRight.set_xlabel('Time (s)')
+    # axsRight.set_ylabel('Velocity (m/s)')
+    # axsRight.grid()
     # axsRight.set_xlim(-5, limit)
 
     plt.show()
@@ -253,6 +254,12 @@ def cycleWater(dumpTime, pumpTime, volume, distance, pumpPower, surfaceArea, inn
     axsMid.grid()
 
     fig.subplots_adjust(bottom=0.15)
+    # Set time limit between 1 hour before and 1 hour after
+
+    # axsTop.set_xlim(2.625*10**4, 4*10**4)
+    # axsMid.set_xlim(2.625*10**4, 4*10**4)
+
+
     plt.show()
 
     return netEnergy
@@ -297,6 +304,38 @@ def maxPower(volume, distance, surfaceArea, innerDiameter, turbineOpeness):
 
     return max(dumpResults[9])
 
+def profitPerDay(volume, distance, pumpPower, surfaceArea, innerDiameter, turbineOpeness):
+
+    # Pump water
+    pumpResults = pumpWater(volume, distance, pumpPower, surfaceArea, innerDiameter)
+
+    # Dump water
+    dumpResults = dumpWater(volume, distance, surfaceArea, innerDiameter, turbineOpeness)
+
+    energyUsed = pumpResults[8]
+    energyGenerated = dumpResults[8]
+
+    energyUsed = energyUsed * 2.778*10**(-7)
+    energyGenerated = energyGenerated * 2.778*10**(-7)
+
+    ppd = (energyGenerated * 0.466) - (energyUsed * 0.148)
+
+    return ppd
+
+
+def storageCap(volume, distance, surfaceArea, innerDiameter, turbineOpeness):
+    
+        # Dump water
+        dumpResults = dumpWater(volume, distance, surfaceArea, innerDiameter, turbineOpeness)
+    
+        # Energy Total
+        dEnergy = dumpResults[8]
+        
+        # Net Energy
+        dEnergy = dEnergy * 2.778*10**(-7)
+
+        print(dEnergy)
+
 
 # Function to plot a heatmap of varying distance and volume against net energy using plotly
 def plotHeatmap(pbounds,points):
@@ -317,26 +356,36 @@ def plotHeatmap(pbounds,points):
     # Create a list of net energy
     netEnergyList = np.zeros((len(volumeList), len(distanceList)))
 
+    # Create a list of profit per day
+    ppdList = np.zeros((len(volumeList), len(distanceList)))
+
     # Loop through the lists
     for i in range(len(volumeList)):
         for j in range(len(distanceList)):
-            netEnergyList[j][i] = netEnergy(volumeList[i], distanceList[j], pumpPower, surfaceArea, innerDiameter, turbineOpeness)
+            # netEnergyList[j][i] = netEnergy(volumeList[i], distanceList[j], pumpPower, surfaceArea, innerDiameter, turbineOpeness)
+            ppdList[j][i] = profitPerDay(volumeList[i], distanceList[j], pumpPower, surfaceArea, innerDiameter, turbineOpeness)
             print("Plotting point: ", i+1, j+1, "of", len(volumeList), len(distanceList))
 
     # Create the heatmap
-    fig = go.Figure(data=go.Heatmap(
+    fig = go.Figure(data=go.Contour(
         x=volumeList,
         y=distanceList,
-        z=netEnergyList,
-        colorscale='blugrn'))
-
-    fig.update_layout(
-        title='Net Energy of the System',
-        xaxis_title='Volume (m^3)',
-        yaxis_title='Distance (m)',
-        xaxis_nticks=36,
+        # z=netEnergyList,
+        z=ppdList,
+        colorscale='blugrn',
+        colorbar=dict(
+            # title='Net Energy (J)',
+            title='Profit per Day (£)'
+        ))
     )
 
+    fig.update_layout(
+        xaxis_title='Volume (m^3)',
+        yaxis_title='Distance (m)',
+        xaxis_nticks=11,
+    )
+
+    pio.write_image(fig, 'images/fig1.png')
     fig.show()
 
 
@@ -350,7 +399,8 @@ def bayesianOptimise(pbounds, initPoints, iterations):
     optimiser = BayesianOptimization(
         f=netEnergy,
         pbounds=pbounds,
-        verbose=2,
+        verbose=1,
+        random_state=1234,
         allow_duplicate_points=True
     )
 
@@ -364,8 +414,32 @@ def bayesianOptimise(pbounds, initPoints, iterations):
 
     return(optimiser)
 
-# maximumPower = maxPower(optimiser.max['params']['volume'], optimiser.max['params']['distance'], optimiser.max['params']['surfaceArea'], optimiser.max['params']['innerDiameter'], optimiser.max['params']['turbineOpeness'])
-# print("The maximum power generated is: ", round(maximumPower, 2), "Watts /", round(maximumPower/1000, 2), "Kilowatts /", round(maximumPower/1000000, 2), "Megawatts")
+
+# Function to Bayesian optimise the system
+def bayesianOptimise2(pbounds, initPoints, iterations):
+    
+    # Prefer exploration over exploitation
+    acquisition_function = UtilityFunction(kind="poi", xi=1e-1)
+
+    # Create the optimiser
+    optimiser = BayesianOptimization(
+        f=profitPerDay,
+        pbounds=pbounds,
+        verbose=1,
+        random_state=1234,
+        allow_duplicate_points=True
+    )
+
+    optimiser.maximize(
+        init_points=initPoints,
+        n_iter=iterations,
+        acquisition_function=acquisition_function
+    )
+
+    print(optimiser.max)
+
+    return(optimiser)
+
 
 def plotBayesian(optimiser):
 
@@ -396,9 +470,9 @@ def plotBayesian(optimiser):
     )
 
     fig.update_traces(
-        marker_size=20,
+        marker_size=15,
         marker_line_width=2,
-        marker_line_color='White',
+        marker_line_color='Black',
     )
 
     # More ticks on the x-axis
@@ -407,4 +481,5 @@ def plotBayesian(optimiser):
     # More ticks on the y-axis
     fig.update_yaxes(nticks=20)
 
+    pio.write_image(fig, 'images/fig2.png')
     fig.show()

@@ -1,13 +1,13 @@
 import numpy as np
 
 # Pipe Attributes
-f = 0.002                                                    # Friction factor
+f = 0.01                                                    # Friction factor
 
 # Pump Attributes
-pumpEfficiency = 0.8                                        # Pump efficiency
+pumpEfficiency = 0.875                                        # Pump efficiency
 
 # Turbin Attributes
-turbineEfficiency = 0.8                                     # Turbine efficiency
+turbineEfficiency = 0.875                                     # Turbine efficiency
 
 # Environment Attributes
 g = 9.81                                                    # Gravity
