@@ -304,6 +304,7 @@ def maxPower(volume, distance, surfaceArea, innerDiameter, turbineOpeness):
 
     return max(dumpResults[9])
 
+# Functino to return the profit per day
 def profitPerDay(volume, distance, pumpPower, surfaceArea, innerDiameter, turbineOpeness):
 
     # Pump water
@@ -323,6 +324,7 @@ def profitPerDay(volume, distance, pumpPower, surfaceArea, innerDiameter, turbin
     return ppd
 
 
+# Function to return the storage capacity of the system
 def storageCap(volume, distance, surfaceArea, innerDiameter, turbineOpeness):
     
         # Dump water
